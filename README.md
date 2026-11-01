@@ -1,4 +1,4 @@
-# Zarp
+# Zarp for Linux
 
 [![Build](https://github.com/ZarpVPN/Zarp-Linux/actions/workflows/build.yml/badge.svg)](https://github.com/ZarpVPN/Zarp-Linux/actions/workflows/build.yml)
 [![Release](https://img.shields.io/github/v/release/ZarpVPN/Zarp-Linux)](https://github.com/ZarpVPN/Zarp-Linux/releases/latest)
