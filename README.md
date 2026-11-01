@@ -14,12 +14,15 @@ One-click Cloudflare WARP for Linux networks that block it. Zarp finds a [zapret
 
 | Platform | Download | Requirements |
 |---|---|---|
-| **Ubuntu** | [**DEB**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-ubuntu-amd64.deb) | Ubuntu 26.04, x86_64, systemd |
-| **Debian** | [**DEB**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-debian-amd64.deb) | Debian 13, x86_64, systemd |
-| **Fedora** | [**RPM**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-fedora-x86_64.rpm) | Fedora 44, x86_64, systemd |
-| **Arch Linux** | [**Package**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-arch-x86_64.pkg.tar.zst) | Current Arch Linux, x86_64, systemd |
+| **Linux** | [**Ubuntu**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-ubuntu-amd64.deb) · [**Debian**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-debian-amd64.deb) · [**Fedora**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-fedora-x86_64.rpm) · [**Arch Linux**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-arch-x86_64.pkg.tar.zst) · [all releases](https://github.com/ZarpVPN/Zarp-Linux/releases) | Ubuntu 26.04, Debian 13, Fedora 44 or current Arch Linux; x86_64, systemd |
+| **Windows** | [**Zarp.exe**](https://github.com/ZarpVPN/Zarp/releases/latest/download/Zarp.exe) · [all releases](https://github.com/ZarpVPN/Zarp/releases) | Windows 10/11 x64, administrator rights. [Cloudflare WARP](https://one.one.one.one/) is installed by Zarp if it is missing |
+| **macOS** | [**DMG**](https://github.com/ZarpVPN/Zarp-MacOS/releases/latest) · [all releases](https://github.com/ZarpVPN/Zarp-MacOS/releases) · [source](https://github.com/ZarpVPN/Zarp-MacOS) | Apple Silicon (M1 or newer), macOS 14+, an administrator password once. No WARP app needed |
+| **Android** | [**APK**](https://github.com/ZarpVPN/Zarp-Android/releases/latest) · [source](https://github.com/ZarpVPN/Zarp-Android) | Android 8.0+, no root, no WARP app needed |
 
-[All Linux releases](https://github.com/ZarpVPN/Zarp-Linux/releases) · [Windows](https://github.com/ZarpVPN/Zarp) · [macOS](https://github.com/ZarpVPN/Zarp-MacOS) · [Android](https://github.com/ZarpVPN/Zarp-Android)
+[![Linux release](https://img.shields.io/github/v/release/ZarpVPN/Zarp-Linux?label=Linux)](https://github.com/ZarpVPN/Zarp-Linux/releases/latest)
+[![Windows release](https://img.shields.io/github/v/release/ZarpVPN/Zarp?label=Windows)](https://github.com/ZarpVPN/Zarp/releases/latest)
+[![macOS release](https://img.shields.io/github/v/release/ZarpVPN/Zarp-MacOS?label=macOS)](https://github.com/ZarpVPN/Zarp-MacOS/releases/latest)
+[![Android release](https://img.shields.io/github/v/release/ZarpVPN/Zarp-Android?label=Android)](https://github.com/ZarpVPN/Zarp-Android/releases/latest)
 
 ## 💬 Community & Support
 
