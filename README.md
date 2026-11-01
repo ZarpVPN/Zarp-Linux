@@ -8,8 +8,6 @@ One-click Cloudflare WARP for Linux networks that block it. Zarp finds a [zapret
 
 ![Zarp on Linux: main window and settings](docs/screenshot.png)
 
-*The screenshot shows the offline demo; connection results are simulated.*
-
 ## Download
 
 | Platform | Download | Requirements |

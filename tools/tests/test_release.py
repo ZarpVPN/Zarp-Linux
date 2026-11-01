@@ -45,13 +45,29 @@ class ReleaseTests(unittest.TestCase):
         output = self.work / 'release'
         release.collect(self.work / 'artifacts', output)
         lines = (output / 'SHA256SUMS').read_text().splitlines()
+        notes = (output / 'notes.md').read_text(encoding='utf-8')
         self.assertEqual(len(lines), 4)
         for line in lines:
             digest, name = line.split('  ')
             self.assertEqual(release.sha256(output / name), digest)
+            self.assertIn(line, notes)
+            self.assertIn('/releases/download/v' + release.version() + '/' + name, notes)
         manifest = json.loads((output / 'release-manifest.json').read_text())
         self.assertEqual(manifest['version'], release.version())
         self.assertEqual({p['platform'] for p in manifest['packages']}, set(release.ASSETS))
+
+    def test_notes_use_versions_from_the_release_manifest(self):
+        versions = {'zapret2': 'pinned-test-commit', 'sing-box': '99.2.3', 'xray': '99.4.5'}
+        manifest = json.loads((self.runtime / 'integrity.json').read_text())
+        manifest['versions'] = versions
+        (self.runtime / 'integrity.json').write_text(json.dumps(manifest))
+        for platform in release.ASSETS:
+            self.stage(platform)
+        output = self.work / 'release'
+        release.collect(self.work / 'artifacts', output)
+        notes = (output / 'notes.md').read_text(encoding='utf-8')
+        for name, value in versions.items():
+            self.assertIn('| ' + name + ' | `' + value + '` |', notes)
 
     def test_partial_release_is_rejected(self):
         self.stage('ubuntu')

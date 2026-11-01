@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+from string import Template
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = {
@@ -16,6 +17,19 @@ ASSETS = {
     'arch': 'zarp-arch-x86_64.pkg.tar.zst',
 }
 SUFFIXES = {'ubuntu': '.deb', 'debian': '.deb', 'fedora': '.rpm', 'arch': '.pkg.tar.zst'}
+PLATFORMS = {'ubuntu': 'Ubuntu 26.04', 'debian': 'Debian 13', 'fedora': 'Fedora 44', 'arch': 'Arch Linux'}
+
+def release_notes(source_version, packages):
+    entries = {info['platform']: info for info in packages}
+    base = 'https://github.com/ZarpVPN/Zarp-Linux/releases/download/v' + source_version + '/'
+    downloads = '| System | Package |\n| --- | --- |\n'
+    downloads += '\n'.join(f'| {label} | [{ASSETS[platform]}]({base}{ASSETS[platform]}) |' for platform, label in PLATFORMS.items())
+    checksums = '\n'.join(entries[platform]['sha256'] + '  ' + ASSETS[platform] for platform in ASSETS)
+    versions = packages[0]['runtime']
+    runtimes = '| Engine | Version |\n| --- | --- |\n'
+    runtimes += '\n'.join(f'| {name} | `{value}` |' for name, value in versions.items())
+    template = Template((ROOT / 'resources/release-notes.md').read_text(encoding='utf-8'))
+    return template.substitute(version=source_version, downloads=downloads, checksums=checksums, runtimes=runtimes)
 
 def version():
     match = re.search(r'^const Version = "([^"]+)"$', (ROOT / 'internal/core/types.go').read_text(), re.M)
@@ -112,17 +126,7 @@ def collect(source, output):
         packages.append(info)
     (output / 'SHA256SUMS').write_text('\n'.join(checksums) + '\n')
     (output / 'release-manifest.json').write_text(json.dumps({'schema': 1, 'version': source_version, 'packages': packages}, indent=2) + '\n')
-    (output / 'notes.md').write_text(
-        f'## Zarp for Linux {source_version}\n\n'
-        'Нативные пакеты Linux x86_64: Ubuntu 26.04, Debian 13, Fedora 44 и Arch Linux.\n\n'
-        '| Система | Файл |\n| --- | --- |\n'
-        + ''.join(f'| {name.capitalize()} | `{file}` |\n' for name, file in ASSETS.items())
-        + '\nПроверка загрузки: `sha256sum --check SHA256SUMS --ignore-missing`.\n\n'
-        'Cloudflare WARP устанавливается отдельно. На Ubuntu и Debian Zarp может установить официальный клиент после принятия его условий. '
-        'Пакеты Zarp не содержат проприетарный клиент WARP и пока не подписаны отдельным ключом проекта.\n\n'
-        'Перед публикацией выполнены Go/race, GUI и пакетные тесты в изолированной сети. '
-        'Работоспособность конкретной стратегии зависит от вашего провайдера.\n'
-    )
+    (output / 'notes.md').write_text(release_notes(source_version, packages), encoding='utf-8')
     return packages
 
 def main():
