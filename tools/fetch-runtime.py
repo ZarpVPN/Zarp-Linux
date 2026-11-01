@@ -53,7 +53,7 @@ def main():
     if not source.exists():
         subprocess.run(["git", "clone", "https://github.com/bol-van/zapret2.git", str(source)], check=True)
     subprocess.run(["git", "-C", str(source), "checkout", "--detach", LOCK["zapretCommit"]], check=True)
-    subprocess.run(["make", "-C", str(source / "nfq2"), "LUA_JIT=0", "LUA_VER=5.4", "-j2"], check=True)
+    subprocess.run(["bash", str(ROOT / "tools/build-nfqws.sh"), str(source / "nfq2")], check=True)
     shutil.copyfile(source / "nfq2/nfqws2", OUT / "nfqws2")
     (OUT / "nfqws2").chmod(0o755)
     for name in ("zapret-lib.lua", "zapret-antidpi.lua"):

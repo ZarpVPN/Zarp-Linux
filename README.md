@@ -1,47 +1,67 @@
-<p align="center">
-  <img src="resources/zarp.svg" width="88" alt="Zarp">
-</p>
+# Zarp
 
-<h1 align="center">Zarp for Linux</h1>
+[![Build](https://github.com/ZarpVPN/Zarp-Linux/actions/workflows/build.yml/badge.svg)](https://github.com/ZarpVPN/Zarp-Linux/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/ZarpVPN/Zarp-Linux)](https://github.com/ZarpVPN/Zarp-Linux/releases/latest)
+[![License: MIT](https://img.shields.io/github/license/ZarpVPN/Zarp-Linux)](LICENSE)
 
-<p align="center">
-  Cloudflare WARP и ваши VPN-серверы через zapret2.
-  <br>
-  Одна кнопка, автоматический поиск стратегии и проверка соединения.
-</p>
+One-click Cloudflare WARP for Linux networks that block it. Zarp finds a [zapret2](https://github.com/bol-van/zapret2) strategy that gets the WARP handshake through DPI, remembers it and connects. You can also put zapret2 in front of your own VLESS, Trojan, Hysteria2 or XHTTP server, with routing rules and a choice of programs. Native packages are available for Ubuntu, Debian, Fedora and Arch Linux.
 
-<p align="center">
-  <a href="https://github.com/ZarpVPN/Zarp-Linux/actions/workflows/build.yml"><img src="https://github.com/ZarpVPN/Zarp-Linux/actions/workflows/build.yml/badge.svg" alt="Build"></a>
-  <a href="https://github.com/ZarpVPN/Zarp-Linux/releases/latest"><img src="https://img.shields.io/github/v/release/ZarpVPN/Zarp-Linux" alt="Release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-  <img src="https://img.shields.io/badge/Linux-x86__64-f48120?logo=linux&logoColor=white" alt="Linux x86_64">
-</p>
+![Zarp on Linux: main window and settings](docs/screenshot.png)
 
-Zarp подбирает стратегию [zapret2](https://github.com/bol-van/zapret2), которая помогает подключить WARP в сети с DPI, проверяет соединение и сохраняет результат. Можно использовать собственный VLESS, Trojan, Hysteria2 или XHTTP-сервер: его внешнее соединение также проходит через zapret2.
+*The screenshot shows the offline demo; connection results are simulated.*
 
-<p align="center">
-  <img src="docs/images/main.png" width="300" alt="Главное окно Zarp для Linux">
-  <img src="docs/images/settings.png" width="590" alt="Настройки и результаты поиска стратегий">
-  <br>
-  <sub>Интерфейс в автономном деморежиме. Результаты на снимках смоделированы.</sub>
-</p>
+## Download
 
-## Скачать
+| Platform | Download | Requirements |
+|---|---|---|
+| **Ubuntu** | [**DEB**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-ubuntu-amd64.deb) | Ubuntu 26.04, x86_64, systemd |
+| **Debian** | [**DEB**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-debian-amd64.deb) | Debian 13, x86_64, systemd |
+| **Fedora** | [**RPM**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-fedora-x86_64.rpm) | Fedora 44, x86_64, systemd |
+| **Arch Linux** | [**Package**](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-arch-x86_64.pkg.tar.zst) | Current Arch Linux, x86_64, systemd |
 
-Пакеты публикуются в [GitHub Releases](https://github.com/ZarpVPN/Zarp-Linux/releases). Релиз содержит версии для каждой системы и файл `SHA256SUMS`.
+[All Linux releases](https://github.com/ZarpVPN/Zarp-Linux/releases) · [Windows](https://github.com/ZarpVPN/Zarp) · [macOS](https://github.com/ZarpVPN/Zarp-MacOS) · [Android](https://github.com/ZarpVPN/Zarp-Android)
 
-| Система | Пакет | Требования |
-| --- | --- | --- |
-| **Ubuntu 26.04** | [zarp-ubuntu-amd64.deb](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-ubuntu-amd64.deb) | x86_64, systemd |
-| **Debian 13** | [zarp-debian-amd64.deb](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-debian-amd64.deb) | x86_64, systemd |
-| **Fedora 44** | [zarp-fedora-x86_64.rpm](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-fedora-x86_64.rpm) | x86_64, systemd |
-| **Arch Linux** | [zarp-arch-x86_64.pkg.tar.zst](https://github.com/ZarpVPN/Zarp-Linux/releases/latest/download/zarp-arch-x86_64.pkg.tar.zst) | актуальная система, x86_64, systemd |
+## 💬 Community & Support
 
-Другие платформы: [Windows](https://github.com/ZarpVPN/Zarp) · [macOS](https://github.com/ZarpVPN/Zarp-MacOS) · [Android](https://github.com/ZarpVPN/Zarp-Android).
+Have questions, ideas, or feedback? Join our [Zarp Community](https://github.com/orgs/ZarpVPN/discussions)!
 
-## Установка
+- ❓ Ask questions and get help
+- 💡 Suggest new features
+- 📢 Follow announcements
+- 🗳️ Vote on upcoming improvements
 
-Скачайте пакет своей системы и установите его:
+Found a bug? [Open an issue](https://github.com/ZarpVPN/Zarp-Linux/issues) with your distribution, Zarp version, strategy and error message.
+
+## Features
+
+- **One button.** The first click searches for a working strategy; later clicks use the saved results.
+- **Built for WARP.** Strategies target the WARP handshake: MASQUE over QUIC (HTTP/3) and over TLS (HTTP/2). Device registration also goes through zapret2.
+- **Repeated checks.** A strategy must pass twice. When test isolation is enabled, the second check uses another WARP endpoint. A connection counts only if HTTPS traffic passes through the tunnel and the strategy is applied.
+- **Quick and full scan.** Quick scan stops after the selected number of confirmed strategies. Full scan tests the whole list. You can also recheck selected rows or choose a strategy manually.
+- **Your own server.** VLESS TLS / Reality, Trojan, Hysteria2 and VLESS XHTTP, from a single link or an HTTPS subscription. The outer connection to the selected server goes through zapret2 while the tunnel is up. [sing-box](https://github.com/SagerNet/sing-box) handles the tunnel; [Xray-core](https://github.com/XTLS/Xray-core) handles XHTTP through a local bridge.
+- **Routing and per-program proxy** (your own server). Direct, Proxy and Block rules, GeoIP/GeoSite, country and local-network presets, and a choice of programs. See [connection settings](docs/connection-settings.md).
+- **WARP+ subscriptions.** Apply an existing WARP+ license through the official client. The request is protected by zapret2, and the WARP client keeps the license.
+- **Countries and custom strategies.** Filter strategies by country, add your own profiles and keep their verified results.
+- **Verified runtime.** Packages include zapret2, sing-box and Xray. Downloads are pinned and checked; zapret2 updates are validated before activation, with the bundled runtime kept for recovery.
+- **Your language.** English, Русский, Español, Português, 中文, हिन्दी, Français, Deutsch and فارسی. The globe button switches the interface language. The compact interface includes the animated power button, settings, log and system tray.
+
+## Requirements
+
+- Ubuntu 26.04, Debian 13, Fedora 44 or current Arch Linux, x86_64.
+- systemd, nftables and an interactive polkit agent. The GUI runs as your ordinary user; a system service handles packet interception and tunnels.
+- Kernel support for NFQUEUE and cgroup v2. WARP interception needs `nft_socket` or the `xt_cgroup` compatibility path with `iptables-nft`.
+- The official [Cloudflare WARP client](https://one.one.one.one/) for WARP mode. On Ubuntu and Debian, Zarp can install it after you accept Cloudflare's terms. On Fedora and Arch, install the client separately. Your own server mode uses the bundled VPN engines.
+
+Packages are built natively for the systems above. Older distributions, ARM64 and systems without systemd are not covered by these builds.
+
+## Usage
+
+1. Download the package for your distribution and install it.
+2. Start the Zarp service and open Zarp from the application menu.
+3. Press the power button. Change the strategy or run a full scan in Settings.
+
+<details>
+<summary>Package installation commands</summary>
 
 ```sh
 # Ubuntu
@@ -57,43 +77,36 @@ sudo dnf install ./zarp-fedora-x86_64.rpm
 sudo pacman -U ./zarp-arch-x86_64.pkg.tar.zst
 ```
 
-Запустите службу и откройте приложение из меню или терминала:
+Then start the service and application:
 
 ```sh
 sudo systemctl enable --now zarp.service
 zarp
 ```
 
-Интерфейс работает от обычного пользователя. Системная служба управляет перехватом пакетов и туннелем; доступ к ней проверяется через polkit.
+</details>
 
-**Cloudflare WARP:** Zarp использует официальный клиент. На Ubuntu и Debian он устанавливается приложением после принятия условий Cloudflare. На Arch и Fedora официальный клиент нужно установить отдельно. WARP не входит в пакеты Zarp.
+**No Cloudflare WARP yet?** On Ubuntu and Debian, accept the installation prompt. Zarp downloads the official client from Cloudflare, verifies the signed package metadata and installs it. If ordinary download attempts fail, it retries through zapret2. The proprietary WARP client is not bundled with Zarp. On Fedora and Arch, install it separately before using WARP mode.
 
-## Возможности
+**Quick scan** stops after enough confirmed strategies are found; the number is adjustable. **Full scan** checks every candidate. Double-click a row or press **Use** to select a strategy. Green results are confirmed; blue results have passed once, red results failed, and grey rows have not been tested. Hover over a result to read the full message.
 
-- **Подключение одной кнопкой.** При первом запуске Zarp ищет рабочую стратегию, затем использует сохранённые результаты.
-- **WARP через zapret2.** MASQUE поверх QUIC / HTTP/3 и TLS / HTTP/2. Регистрация устройства также защищается zapret2.
-- **Быстрый и полный поиск.** Каждая рабочая стратегия проверяется повторно; при включённой изоляции используется другой endpoint.
-- **Проверка трафика.** Статуса «Подключено» от WARP недостаточно: проверяется HTTPS через туннель и применение стратегии.
-- **Собственные серверы.** VLESS TLS / Reality, Trojan, Hysteria2 и VLESS XHTTP, отдельные ссылки и подписки. Подробности в [настройках подключения](docs/connection-settings.md).
-- **Маршрутизация.** Правила Direct, Proxy и Block, пресеты локальных сетей, России, Ирана и Китая, выбор программ для собственного сервера.
-- **WARP+.** Привязка существующей лицензии через официальный клиент с защищёнными запросами.
-- **Свои стратегии.** Редактирование профилей zapret2, фильтрация по странам и проверка выбранных строк.
-- **Обновления zapret2.** Проверка опубликованного SHA-256 и конфигурации перед активацией. Поставляемый runtime сохраняется для восстановления.
-- **Привычный интерфейс.** Анимированная кнопка подключения, отдельное окно настроек, журнал, языки и системный трей.
+**Server and endpoints**, **Routing**, **Per-app proxy** and **WARP+** are described in [connection settings](docs/connection-settings.md). Routing rules and program selection apply to your own server; WARP uses the official client's system tunnel.
 
-## Как пользоваться
+### Verify the download
 
-1. Нажмите кнопку подключения или откройте настройки и запустите поиск.
-2. **Быстрый поиск** останавливается после нужного количества подтверждённых стратегий. **Полный поиск** проверяет весь список.
-3. Для ручного выбора нажмите на строку дважды или используйте кнопку **«Использовать»**.
+Each release includes `SHA256SUMS` and `release-manifest.json`, with package hashes, the source commit and runtime versions. Download `SHA256SUMS` alongside your package and run:
 
-Зелёный результат означает успешную повторную проверку. Синий показывает первый успешный проход, красный обозначает ошибку, серый показывает ещё не проверенную стратегию. Наведите курсор на результат, чтобы прочитать сообщение полностью.
+```sh
+sha256sum --check SHA256SUMS --ignore-missing
+```
 
-Количество рабочих стратегий зависит от сети. Zarp проверяет фактическое соединение и не считает успешным неподтверждённый туннель. На малом MTU используется компактный VK Initial с сохранённым ClientHello; фрагментация учитывает firewall официального WARP.
+## How it works
 
-## Сборка и разработка
+The desktop interface talks to the local Zarp service over a Unix socket with polkit authorization. The service starts `nfqws2`, installs scoped nftables rules, connects the official WARP client and checks real HTTPS traffic through the tunnel. Searching and registering WARP use separate protected flows; a successful registration does not mark a tunnel strategy as working.
 
-Нужны Linux, Go 1.24+, Python 3, PySide6 и инструменты сборки nfqws2. Список пакетов для каждой системы приведён в [руководстве по сборке](docs/building.md).
+With your own server, a candidate is a pair of a server and a compatible zapret2 strategy. Zarp checks the pair, starts the sing-box tunnel with your routing rules and keeps intercepting the outer connection to that server. XHTTP uses Xray as a local bridge behind sing-box.
+
+## Building
 
 ```sh
 make runtime
@@ -102,29 +115,16 @@ make test
 make package
 ```
 
-Демонстрация без сети и изменений VPN:
+Requires Go 1.24+, Python 3, PySide6 and native nfqws2 build dependencies. See [building and releases](docs/building.md) for the package list for each distribution. `make demo` opens an offline demonstration without changing your network or WARP account.
 
-```sh
-make demo
-```
+[GitHub Actions](.github/workflows/build.yml) builds Ubuntu, Debian, Fedora and Arch packages independently. A matching `v*` tag publishes a release after all four builds and checks pass. Checks cover Go/race, the GUI, runtime integrity and real packet handling in an isolated network namespace. See [testing](docs/testing.md).
 
-- [Сборка и автоматические релизы](docs/building.md)
-- [Тестирование](docs/testing.md)
-- [Настройки подключения](docs/connection-settings.md)
-- [Сторонние компоненты](THIRD_PARTY_NOTICES.md)
+## Privacy
 
-## Поддержка
+Zarp has no telemetry. Settings and credentials stay on your machine. Connections use your selected VPN provider and HTTPS connectivity checks. Update checks contact GitHub; WARP installation downloads from Cloudflare's official repository. Subscriptions and optional GeoIP/GeoSite downloads use the addresses you configure.
 
-[Сообщить об ошибке](https://github.com/ZarpVPN/Zarp-Linux/issues) · [Сообщество Zarp](https://github.com/orgs/ZarpVPN/discussions).
+## License
 
-В описании проблемы укажите дистрибутив, версию Zarp, стратегию и текст ошибки. Не публикуйте приватные ключи, лицензии WARP+ и ссылки подписок.
+Zarp for Linux is released under the [MIT License](LICENSE). Licenses and source links for zapret2, sing-box, Xray, fonts and bundled data are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-## Конфиденциальность
-
-Zarp не отправляет телеметрию. Настройки и учётные данные хранятся локально; управление службой доступно через локальный Unix-сокет с проверкой прав. При подключении используются выбранный VPN-провайдер и проверочные HTTPS-адреса. Проверка обновлений обращается к GitHub, установка WARP использует официальный репозиторий Cloudflare.
-
-## Лицензия
-
-Код Zarp распространяется под [MIT](LICENSE). Лицензии zapret2, sing-box, Xray, шрифтов и других включённых компонентов перечислены в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Cloudflare и WARP принадлежат Cloudflare, Inc. Zarp является независимым проектом и не связан с Cloudflare. Проприетарный клиент WARP не распространяется вместе с Zarp.
+Cloudflare and WARP are trademarks of Cloudflare, Inc. Zarp is an independent project, not affiliated with or endorsed by Cloudflare. Zarp does not bundle or redistribute the proprietary Cloudflare WARP client.

@@ -111,7 +111,7 @@ class DesktopIntegrationTests(unittest.TestCase):
 
     def test_native_dialogs_render_and_busy_indicator_moves(self):
         from desktop import dialogs
-        output=ROOT/'build/preview-linux';output.mkdir(parents=True,exist_ok=True)
+        output=Path(os.environ.get('ZARP_TEST_SCREENSHOTS', ROOT/'build/preview-linux'));output.mkdir(parents=True,exist_ok=True)
         self.window.grab().save(str(output/'01-main-idle.png'))
         QTest.mouseClick(self.window.log_toggle,Qt.MouseButton.LeftButton)
         self.wait(lambda:self.window.height()==690)

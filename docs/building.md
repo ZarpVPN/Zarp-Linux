@@ -9,7 +9,7 @@
 ### Ubuntu 26.04 и Debian 13
 
 ```sh
-sudo apt install git build-essential pkg-config liblua5.4-dev libnetfilter-queue-dev libmnl-dev zlib1g-dev \
+sudo apt install git build-essential pkg-config liblua5.4-dev libcap-dev libnetfilter-queue-dev libmnl-dev zlib1g-dev \
   python3 python3-yaml python3-cryptography python3-pyside6.qtwidgets python3-pyside6.qttest \
   qt6-qpa-plugins qt6-wayland fonts-dejavu-core nftables iptables iproute2 gnupg polkitd pkexec
 ```
@@ -17,7 +17,7 @@ sudo apt install git build-essential pkg-config liblua5.4-dev libnetfilter-queue
 ### Fedora 44
 
 ```sh
-sudo dnf install git gcc gcc-c++ make pkgconf-pkg-config lua-devel libnetfilter_queue-devel libmnl-devel zlib-devel \
+sudo dnf install git gcc gcc-c++ make pkgconf-pkg-config lua-devel libcap-devel libnetfilter_queue-devel libmnl-devel zlib-devel \
   python3 python3-pyyaml python3-cryptography python3-pyside6 qt6-qtbase qt6-qtwayland \
   nftables iptables-nft iproute gnupg2 polkit rpm-build
 ```
@@ -25,7 +25,7 @@ sudo dnf install git gcc gcc-c++ make pkgconf-pkg-config lua-devel libnetfilter_
 ### Arch Linux
 
 ```sh
-sudo pacman -S --needed git base-devel lua54 libnetfilter_queue libmnl zlib \
+sudo pacman -S --needed git base-devel lua54 libcap libnetfilter_queue libmnl zlib \
   python python-yaml python-cryptography pyside6 qt6-base qt6-wayland ttf-dejavu \
   nftables iptables iproute2 gnupg polkit
 ```

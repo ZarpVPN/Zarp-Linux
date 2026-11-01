@@ -5,13 +5,7 @@ build_dir=${1:?Specify a native build directory}
 mkdir -p "$build_dir"
 mkdir -p "$build_dir/source"
 cp -a "$project_dir/vendor/zapret2-src/nfq2" "$build_dir/source/"
-lua_pkg=''
-for candidate in lua54 lua5.4 lua-5.4 lua; do
-    if pkg-config --exists "$candidate"; then lua_pkg=$candidate; break; fi
-done
-test -n "$lua_pkg"
-make -C "$build_dir/source/nfq2" LUA_JIT=0 LUA_VER=5.4 "LUA_CFLAGS=$(pkg-config --cflags "$lua_pkg")" "LUA_LIB=$(pkg-config --libs "$lua_pkg")" clean
-make -C "$build_dir/source/nfq2" LUA_JIT=0 "LUA_CFLAGS=$(pkg-config --cflags "$lua_pkg")" "LUA_LIB=$(pkg-config --libs "$lua_pkg")" -j2
+bash "$project_dir/tools/build-nfqws.sh" "$build_dir/source/nfq2"
 mkdir -p "$build_dir/runtime"
 cp -a "$project_dir/vendor/runtime/." "$build_dir/runtime/"
 cp "$build_dir/source/nfq2/nfqws2" "$build_dir/runtime/nfqws2"

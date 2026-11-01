@@ -6,8 +6,10 @@ import os
 from pathlib import Path
 import platform
 import pwd
+import shutil
 import subprocess
 import sys
+import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +44,9 @@ def main():
         report['checks'][name] = {'passed': code == 0, 'exit_code': code}
         (output / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
         print(name, 'passed' if code == 0 else 'FAILED', flush=True)
+        if code != 0:
+            print(name + ' failure details:', flush=True)
+            print('\n'.join((output / (name + '.log')).read_text(errors='replace').splitlines()[-60:]), flush=True)
         return code == 0
 
     check('repository', ['python3', 'tools/check-repo.py'])
@@ -52,13 +57,22 @@ def main():
     check('build-tools', ['python3', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-v'])
     check('compact-quic', ['python3', 'tools/compact-quic-fake.py', '--check'])
     gui_command = ['python3', '-m', 'unittest', 'discover', '-s', str(ROOT / 'desktop/tests'), '-v']
-    if os.geteuid() == 0:
-        if not args.gui_user or pwd.getpwnam(args.gui_user).pw_uid == 0:
-            parser.error('Root callers must specify an ordinary --gui-user')
-        gui_command = ['runuser', '-u', args.gui_user, '--', 'env',
-                       'QT_QPA_PLATFORM=offscreen', 'PYTHONDONTWRITEBYTECODE=1',
-                       'ZARP_DESKTOP_ROOT=' + str(desktop), 'ZARP_TEST_DAEMON=' + str(daemon), *gui_command]
-    check('gui', gui_command, timeout=90)
+    with tempfile.TemporaryDirectory(prefix='zarp-gui-artifacts-') as gui_directory:
+        gui_env = env.copy()
+        gui_env['ZARP_TEST_SCREENSHOTS'] = gui_directory
+        if os.geteuid() == 0:
+            if not args.gui_user:
+                parser.error('Root callers must specify an ordinary --gui-user')
+            gui_user = pwd.getpwnam(args.gui_user)
+            if gui_user.pw_uid == 0:
+                parser.error('Root callers must specify an ordinary --gui-user')
+            os.chown(gui_directory, gui_user.pw_uid, gui_user.pw_gid)
+            gui_command = ['runuser', '-u', args.gui_user, '--', 'env',
+                           'QT_QPA_PLATFORM=offscreen', 'PYTHONDONTWRITEBYTECODE=1',
+                           'ZARP_TEST_SCREENSHOTS=' + gui_directory,
+                           'ZARP_DESKTOP_ROOT=' + str(desktop), 'ZARP_TEST_DAEMON=' + str(daemon), *gui_command]
+        check('gui', gui_command, timeout=90, environment=gui_env)
+        shutil.copytree(gui_directory, output / 'screenshots', dirs_exist_ok=True)
     if not args.skip_netns:
         if os.geteuid() != 0:
             parser.error('Packet tests require root; use --skip-netns or run the namespace script with sudo')
