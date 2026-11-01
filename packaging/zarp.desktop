@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Zarp
+Comment=WARP and VPN connections with zapret2
+Comment[ru]=WARP и VPN с автоматическим подбором стратегий zapret2
+Exec=zarp
+Icon=zarp
+Terminal=false
+Categories=Network;
+StartupWMClass=Zarp

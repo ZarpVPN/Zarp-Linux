@@ -1,0 +1,1 @@
+"""Zarp desktop application."""

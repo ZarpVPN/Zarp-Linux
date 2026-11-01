@@ -1,0 +1,22 @@
+# Optional local references.
+/Zarp/
+/Zarp-MacOS/
+/Zarp-Android/
+
+# Local dependencies, build output and isolated test artifacts.
+/.work/
+/vendor/
+/build/
+/.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+/dist/
+/.cache/
+*.log

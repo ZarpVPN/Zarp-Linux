@@ -1,0 +1,141 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate source version and release tag
+        id: version
+        run: python3 tools/release.py version --github-output "$GITHUB_OUTPUT"
+
+  package:
+    name: ${{ matrix.platform }} x86_64
+    needs: version
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ubuntu
+            image: ubuntu:26.04
+            release: ubuntu26.04
+          - platform: debian
+            image: debian:13
+            release: debian13
+          - platform: fedora
+            image: fedora:44
+            release: fedora44
+          - platform: arch
+            image: archlinux:base-devel
+            release: arch
+    container:
+      image: ${{ matrix.image }}
+      options: --privileged --cgroupns=host
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI_PLATFORM: ${{ matrix.platform }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Install Git for checkout
+        run: |
+          case "$CI_PLATFORM" in
+            ubuntu|debian) apt-get update; apt-get install -y --no-install-recommends ca-certificates git ;;
+            fedora) dnf install -y git ;;
+            arch) pacman -Syu --noconfirm --needed git ;;
+          esac
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Install native build and GUI dependencies
+        run: bash .github/scripts/bootstrap.sh "$CI_PLATFORM"
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: stable
+          cache: false
+      - name: Fetch verified engines and build native runtime
+        run: |
+          make runtime
+          bash tools/build-native-runtime.sh /opt/zarp-build
+      - name: Build application and native package
+        run: |
+          make build
+          python3 tools/native-packages.py --runtime /opt/zarp-build/runtime --release "$CI_RELEASE"
+        env:
+          CI_RELEASE: ${{ matrix.release }}
+      - name: Install package without starting a VPN
+        run: python3 tools/install-package.py --platform "$CI_PLATFORM" --directory "build/packages/$CI_RELEASE"
+        env:
+          CI_RELEASE: ${{ matrix.release }}
+      - name: Test installed package and isolated packet handling
+        run: python3 tools/test-linux.py --installed --gui-user zarpbuild --output "build/test-results/$CI_PLATFORM"
+      - name: Stage release asset
+        run: python3 tools/release.py stage --platform "$CI_PLATFORM" --directory "build/packages/$CI_RELEASE" --runtime /usr/lib/zarp/runtime --output "build/release/$CI_PLATFORM"
+        env:
+          CI_RELEASE: ${{ matrix.release }}
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: tests-${{ matrix.platform }}
+          path: build/test-results/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: package-${{ matrix.platform }}
+          path: build/release/${{ matrix.platform }}/
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish release
+    if: github.ref_type == 'tag' && github.event_name != 'pull_request'
+    needs: [version, package]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          pattern: package-*
+          path: build/artifacts
+      - name: Verify complete release and checksums
+        run: python3 tools/release.py collect --input build/artifacts --output dist
+      - name: Create draft with all packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.deb dist/*.rpm dist/*.zst dist/SHA256SUMS dist/release-manifest.json --verify-tag --draft --title "Zarp for Linux $GITHUB_REF_NAME" --notes-file dist/notes.md --generate-notes
+      - name: Publish completed release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release edit "$GITHUB_REF_NAME" --draft=false --latest

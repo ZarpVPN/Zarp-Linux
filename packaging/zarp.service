@@ -1,0 +1,26 @@
+[Unit]
+Description=Zarp connection manager
+After=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/zarp/zarpd
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+KillMode=control-group
+UMask=0077
+RuntimeDirectory=zarp
+RuntimeDirectoryMode=0755
+StateDirectory=zarp
+StateDirectoryMode=0700
+PrivateTmp=yes
+ProtectHome=yes
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK AF_PACKET
+Environment=PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Zarp</vendor>
+  <vendor_url>https://github.com/ZarpVPN</vendor_url>
+  <action id="dev.zarp.control">
+    <description>Control Zarp connections</description>
+    <message>Authentication is required to control Zarp</message>
+    <defaults><allow_any>no</allow_any><allow_inactive>no</allow_inactive><allow_active>yes</allow_active></defaults>
+  </action>
+  <action id="dev.zarp.prepare">
+    <description>Prepare the Zarp connection service</description>
+    <message>Authentication is required to prepare the Zarp connection service</message>
+    <defaults><allow_any>auth_admin</allow_any><allow_inactive>auth_admin</allow_inactive><allow_active>auth_admin_keep</allow_active></defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/zarp/start-service</annotate>
+  </action>
+</policyconfig>

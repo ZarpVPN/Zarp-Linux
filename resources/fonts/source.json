@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/microsoft/Selawik",
+  "release": "1.01",
+  "archiveSHA256": "3f62c51e05e3b5a1e6241cf92a371f0be2ea1183aa87b30718bbd40832a8d423",
+  "sha256": {
+    "LICENSE.txt": "77b7c2506d4efb22e09c8ccf10159f4956eab3ef7c007fef95de136bcf45300c",
+    "selawk.ttf": "e9d98518d8ac2817782a9a382430463a2e0793ea68350b695bb727d9a830ee1c",
+    "selawkb.ttf": "f0db5e174a90e0956ad7d2844bdca1d5e6da92ec65b2c04e57ba9b180668c904",
+    "selawksb.ttf": "0a9e9d0549a10f24bef9b3a29e06fe6e0b5c21e7a784c503b048a307841a7783"
+  }
+}
